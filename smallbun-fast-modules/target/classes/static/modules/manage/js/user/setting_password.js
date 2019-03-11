@@ -1,0 +1,1 @@
+function doSubmit(){if($(".form-horizontal").valid()){$.modal.loading("正在处理中，请稍后...");var a={url:$(".form-horizontal").attr("action"),type:"post",dataType:"json",data:$(".form-horizontal").serializeArray(),success:function(b){if(b.status===web_status.SUCCESS){$.modal.closeLoading();var c=parent.layer.getFrameIndex(window.name);parent.layer.close(c)}}};$.ajax(a)}};

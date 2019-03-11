@@ -1,0 +1,1 @@
+$(function(){addTabs(({id:"_tab"+Math.random().toString(36).substring(2),title:"首页",close:false,url:"dashboard"}))});function profile(){addTabs(({id:"profile",title:"个人中心",close:true,url:"modules/manage/profile.html"}))};

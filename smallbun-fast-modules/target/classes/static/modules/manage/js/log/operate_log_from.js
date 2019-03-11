@@ -1,0 +1,1 @@
+laydate.render({elem:"#releaseDate",theme:"#6284f3",max:new Date().toLocaleDateString(),value:new Date()});function doSubmit(){if($(".form-horizontal").valid()){var a=$(".form-horizontal").serializeArray();$.operate.save($(".form-horizontal").attr("action"),a)}};
