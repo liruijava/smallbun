@@ -23,6 +23,7 @@
 
 package org.smallbun.fast.manage.role.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.smallbun.fast.manage.menu.service.SysMenuService;
@@ -115,12 +116,12 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleEn
 			role = mapping(super.getById(id), new SysRoleVO());
 			if (!StringUtils.isEmpty(id)) {
 				//放入当前用户拥有的菜单JSON字符串
-				role.setMenusJson(JSONObject.toJSONString(sysMenuService.findByRoleId(id)));
+				role.setMenusJson(JSON.toJSONString(sysMenuService.findByRoleId(id)));
 			}
 			//如果是按照明细设置
 			if (DATA_SCOPE_CUSTOM.getNumber().equals(role.getDataScope())) {
 				//放入当前用户拥有的部门权限JSON字符串
-				role.setOrgsJson(JSONObject
+				role.setOrgsJson(JSON
 						.toJSONString(mappingList(sysOrgService.findByRoleId(id), new ArrayList<>(), SysOrgVO.class)));
 			}
 		}

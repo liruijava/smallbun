@@ -72,7 +72,7 @@ public class SysOperateLogServiceImpl extends BaseServiceImpl<SysOperateLogMappe
 		if (!request.getRequestURI().contains(UNIQUE)) {
 			return StringUtils.isEmpty(request.getParameter(ID)) ?
 					new SysOperateLogVO() :
-					AutoMapperUtil.mapping(getById(request.getParameter(ID)), new SysOperateLogVO());
+					org.smallbun.framework.toolkit.AutoMapperUtil.mapping(getById(request.getParameter(ID)), new SysOperateLogVO());
 		}
 		return new SysOperateLogVO();
 	}

@@ -30,8 +30,6 @@ import org.smallbun.fast.manage.dict.entity.SysDictValueEntity;
 import org.smallbun.fast.manage.dict.service.SysDictValueService;
 import org.smallbun.fast.manage.dict.vo.SysDictValueVO;
 import org.smallbun.framework.base.BaseServiceImpl;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;

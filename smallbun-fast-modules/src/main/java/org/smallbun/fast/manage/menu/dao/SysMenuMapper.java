@@ -28,8 +28,6 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.smallbun.fast.manage.menu.entity.SysMenuEntity;
 import org.smallbun.framework.base.BaseMapper;
-import org.springframework.stereotype.Repository;
-
 import java.io.Serializable;
 import java.util.List;
 

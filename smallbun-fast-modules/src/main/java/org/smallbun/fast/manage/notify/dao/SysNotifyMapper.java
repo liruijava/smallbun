@@ -26,7 +26,6 @@ package org.smallbun.fast.manage.notify.dao;
 import org.apache.ibatis.annotations.Mapper;
 import org.smallbun.fast.manage.notify.entity.SysNotifyEntity;
 import org.smallbun.framework.base.BaseMapper;
-import org.springframework.stereotype.Repository;
 
 /**
  * 通知通告 Mapper 接口

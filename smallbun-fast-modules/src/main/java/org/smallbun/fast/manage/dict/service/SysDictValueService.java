@@ -28,8 +28,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.smallbun.fast.manage.dict.entity.SysDictValueEntity;
 import org.smallbun.fast.manage.dict.vo.SysDictValueVO;
-import org.smallbun.framework.result.AjaxResult;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 

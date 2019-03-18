@@ -26,8 +26,6 @@ package org.smallbun.fast.manage.org.dao;
 import org.apache.ibatis.annotations.Mapper;
 import org.smallbun.fast.manage.org.entity.SysOrgEntity;
 import org.smallbun.framework.base.BaseMapper;
-import org.springframework.stereotype.Repository;
-
 import java.io.Serializable;
 import java.util.List;
 

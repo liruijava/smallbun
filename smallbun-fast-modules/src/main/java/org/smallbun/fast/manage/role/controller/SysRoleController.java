@@ -36,7 +36,6 @@ import org.smallbun.framework.annotation.LogAnnotation;
 import org.smallbun.framework.base.BaseController;
 import org.smallbun.framework.constant.OperateLogConstant;
 import org.smallbun.framework.result.AjaxResult;
-import org.smallbun.framework.result.PageableResult;
 import org.smallbun.framework.result.ResponseResult;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
@@ -46,7 +45,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 import java.util.ArrayList;
@@ -154,10 +152,6 @@ public class SysRoleController extends BaseController {
 	@PostMapping(value = "/page")
 	@LogAnnotation(model = MODEL + SELECT_PAGE_MODEL, action = OperateLogConstant.SELECT_PAGE)
 	public ResponseResult<SysRoleEntity> page(Page<SysRoleEntity> page, SysRoleVO vo) {
-		
-/*		return PageableResult.builder().page(pageVOFilling(
-				sysRoleService.page(new PageFactory<SysRoleEntity>().defaultPage(page), new QueryWrapper<>(vo)),
-				SysRoleVO.class)).build();*/
 		
 		IPage<SysRoleEntity> page1 = sysRoleService.page(new PageFactory<SysRoleEntity>().defaultPage(page), new QueryWrapper<>(vo));
 		return new ResponseResult<>(page1);

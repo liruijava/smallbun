@@ -26,7 +26,6 @@ package org.smallbun.fast.manage.config.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.smallbun.fast.manage.config.entity.SysConfigEntity;
-import org.springframework.stereotype.Repository;
 
 /**
  * 系统配置Mapper接口

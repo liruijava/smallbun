@@ -176,13 +176,30 @@ layui.use('table', function(){
 		    } else if(obj.event === 'edit'){
 		    	function edit(id) {
 		    		var  id = obj.data.id;
-	               	var url = url = contextPath + "role/form/{id}".replace("{id}", "?id=" + id);;
+	               	var url =contextPath + "role/form/{id}".replace("{id}", "?id=" + id);
 	                $.modal.open("修改角色", url);
 	            }
 		    	edit();
 		    }
 		});
 });
+</script>
+
+<script type="text/javascript">
+function showData(data) {
+	var url = contextPath + 'role/page';
+	var json = {};
+	$.ajax({
+		"url": url,
+		"data":json,
+		"type": "POST",
+		"success": function(data) {
+				console.log(data);
+			}
+	});
+}
+
+showData();
 </script>
 
 <script type="text/javascript">
@@ -342,7 +359,6 @@ function batRemove() {
                 $.each($("#" + currentId).serializeArray(), function (i, field) {
                     search[field.name] = field.value;
                 });
-                console.log($table);
                 var roleName=$('#roleName').val();
                 table.reload('table', {
                 	url:contextPath + 'role/page' ,

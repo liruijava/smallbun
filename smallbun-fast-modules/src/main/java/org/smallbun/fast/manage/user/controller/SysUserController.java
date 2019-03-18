@@ -27,7 +27,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.smallbun.fast.common.PageFactory;
-import org.smallbun.fast.manage.role.entity.SysRoleEntity;
 import org.smallbun.fast.manage.user.entity.SysUserEntity;
 import org.smallbun.fast.manage.user.service.SysUserService;
 import org.smallbun.fast.manage.user.util.UserUtil;
@@ -105,7 +104,7 @@ public class SysUserController extends BaseController {
 	 * @return {@link ModelAndView}
 	 */
 	@GetMapping(value = "/form")
-	@PreAuthorize("hasAuthority('manage:user:add') or hasAuthority('manage:user:add')")
+	@PreAuthorize("hasAuthority('manage:user:add') or hasAuthority('manage:user:edit')")
 	@LogAnnotation(model = MODEL, action = OperateLogConstant.OPEN_VIEW_FORM)
 	public ModelAndView form(SysUserVO user, Model model) {
 		model.addAttribute("user", user);
@@ -200,13 +199,15 @@ public class SysUserController extends BaseController {
 	 * 分页查询
 	 * @param page {@link Page}
 	 * @param vo {@link SysUserVO}
-	 * @return  {@link PageableResult}
+	 * @return  {@link ResponseResult<SysUserEntity>}
 	 */
 	@AutoQueryDictValue
 	@PostMapping(value = "/page")
 	@LogAnnotation(model = MODEL + SELECT_PAGE_MODEL, action = OperateLogConstant.SELECT_PAGE)
 	public ResponseResult<SysUserEntity> page(Page<SysUserEntity> page, SysUserVO vo) {
-		IPage<SysUserEntity> page1 = sysUserService.page(new PageFactory<SysUserEntity>().defaultPage(page), new QueryWrapper<>(vo));
+	IPage<SysUserEntity> page1 = sysUserService.page(new PageFactory<SysUserEntity>().defaultPage(page), new QueryWrapper<>(vo));
+		page1.setCurrent(1);
+		page1.setSize(10);
 		return new ResponseResult<>(page1);
 	}
 
@@ -217,7 +218,7 @@ public class SysUserController extends BaseController {
 	 */
 	@AutoQueryDictValue
 	@RequestMapping(value = "/list")
-	@LogAnnotation(model = MODEL + SELECT_LIST_MODEL, action = OperateLogConstant.SELECT_PAGE)
+	@LogAnnotation(model = MODEL + SELECT_LIST_MODEL, action = OperateLogConstant.SELECT_LIST)
 	public AjaxResult list(QueryWrapper<SysUserEntity> wrapper) {
 		return AjaxResult.builder()
 				.result(mappingList(sysUserService.list(wrapper), new ArrayList<>(), SysUserVO.class)).build();

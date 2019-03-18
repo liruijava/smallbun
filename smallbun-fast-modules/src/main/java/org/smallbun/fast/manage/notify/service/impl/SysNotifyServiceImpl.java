@@ -50,7 +50,7 @@ public class SysNotifyServiceImpl extends BaseServiceImpl<SysNotifyMapper, SysNo
 		if (!request.getRequestURI().contains(UNIQUE)) {
 			return StringUtils.isEmpty(request.getParameter(ID)) ?
 					new SysNotifyVO() :
-					AutoMapperUtil.mapping(getById(request.getParameter(ID)), new SysNotifyVO());
+					org.smallbun.framework.toolkit.AutoMapperUtil.mapping(getById(request.getParameter(ID)), new SysNotifyVO());
 		}
 		return new SysNotifyVO();
 	}

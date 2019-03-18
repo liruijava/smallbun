@@ -31,8 +31,6 @@ import org.apache.ibatis.annotations.Select;
 import org.smallbun.fast.manage.dict.entity.SysDictValueEntity;
 import org.smallbun.fast.manage.dict.vo.SysDictValueVO;
 import org.smallbun.framework.base.BaseMapper;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 /**

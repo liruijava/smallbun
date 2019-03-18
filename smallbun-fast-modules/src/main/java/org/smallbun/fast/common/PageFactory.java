@@ -49,9 +49,9 @@ public class PageFactory<T> {
 		HttpServletRequest request = ((ServletRequestAttributes) Objects
 				.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
 		//排序字段名称
-		String isAsc = request.getParameter("isAsc");
+		String isAsc = "isAsc";
 		//asc或desc(升序或降序)
-		String order = request.getParameter("orderByColumn");
+		String order = "orderByColumn";
 		if (DESC.equals(isAsc)) {
 			page.setDesc(camelToUnderline(order));
 		}

@@ -27,8 +27,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.smallbun.fast.manage.role.entity.SysRoleEntity;
 import org.smallbun.framework.base.BaseMapper;
-import org.springframework.stereotype.Repository;
-
 import java.io.Serializable;
 import java.util.List;
 

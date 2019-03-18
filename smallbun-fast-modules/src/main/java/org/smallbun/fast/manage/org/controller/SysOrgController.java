@@ -24,21 +24,18 @@
 package org.smallbun.fast.manage.org.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.smallbun.fast.common.PageFactory;
 import org.smallbun.fast.common.utils.AutoMapperUtil;
 import org.smallbun.fast.manage.org.entity.SysOrgEntity;
 import org.smallbun.fast.manage.org.service.SysOrgService;
 import org.smallbun.fast.manage.org.vo.SysOrgVO;
-import org.smallbun.fast.manage.role.entity.SysRoleEntity;
 import org.smallbun.framework.annotation.AutoQueryDictValue;
 import org.smallbun.framework.annotation.DemoEnvironment;
 import org.smallbun.framework.annotation.LogAnnotation;
 import org.smallbun.framework.base.BaseController;
 import org.smallbun.framework.result.AjaxResult;
 import org.smallbun.framework.result.PageableResult;
-import org.smallbun.framework.result.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;

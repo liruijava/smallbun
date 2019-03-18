@@ -76,21 +76,21 @@
           and is_deleted = 0
     </select>
     <!--自定义分页查询-->
-    <select id="page" resultMap="userMap">
-        select * from sys_user s left join sys_org o on o.id = s.org_id where s.is_deleted=#{p.isDeleted}
-        <if test="!@org.springframework.util.ObjectUtils@isEmpty(p.orgId)">
-            and o.id=#{p.orgId} or o.parent_id=#{p.orgId}
+   <select id="selectPage" resultMap="userMap">
+         select * from sys_user s left join sys_org o on o.id = s.org_id where s.is_deleted=0
+        <!--  <if test="!@org.springframework.util.ObjectUtils@isEmpty(p.orgId)">
+             and o.id=#{p.orgId} or o.parent_id=#{p.orgId}
+         </if> 
+        <if test="!@org.springframework.util.ObjectUtils@isEmpty(p.username)"> 
+             and s.username like CONCAT('%',#{p.username},'%') 
         </if>
-        <if test="!@org.springframework.util.ObjectUtils@isEmpty(p.username)">
-            and s.username like CONCAT('%',#{p.username},'%')
-        </if>
-        <if test="!@org.springframework.util.ObjectUtils@isEmpty(p.phone)">
-            and s.phone=#{p.phone}
-        </if>
-        <if test="!@org.springframework.util.ObjectUtils@isEmpty(p.birthdayStart) and !@org.springframework.util.ObjectUtils@isEmpty(p.birthdayEnd)">
-            and s.birthday between #{p.birthdayStart} and #{p.birthdayEnd}
-        </if>
-    </select>
+         <if test="!@org.springframework.util.ObjectUtils@isEmpty(p.phone)">
+            and s.phone=#{p.phone} 
+         </if> 
+         <if test="!@org.springframework.util.ObjectUtils@isEmpty(p.birthdayStart) and !@org.springframework.util.ObjectUtils@isEmpty(p.birthdayEnd)">
+             and s.birthday between #{p.birthdayStart} and #{p.birthdayEnd} 
+         </if> --> 
+    </select> 
     <!--根据ID查询用户-->
     <select id="findById" resultMap="userMap">
         select id,

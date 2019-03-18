@@ -156,15 +156,14 @@ public class SysNotifyController extends BaseController {
 	 */
 	@PostMapping(value = "/page")
 	@LogAnnotation(model = MODEL + SELECT_PAGE, action = OperateLogConstant.SELECT_PAGE)
-	public ResponseResult<SysNotifyEntity> page(Page<SysNotifyEntity> page, SysNotifyVO vo) {
-		
+	public PageableResult page(Page<SysNotifyEntity> page, SysNotifyVO vo) {
+		/*
 		IPage<SysNotifyEntity> page1 = sysNotifyService.page(new PageFactory<SysNotifyEntity>().defaultPage(page), new QueryWrapper<>(vo));
 		return new ResponseResult<>(page1);
-				
-				
-		/*return PageableResult.builder().page(pageVOFilling(
+				*/
+		return PageableResult.builder().page(pageVOFilling(
 				sysNotifyService.page(new PageFactory<SysNotifyEntity>().defaultPage(page), new QueryWrapper<>(vo)),
-				SysNotifyVO.class)).build();*/
+				SysNotifyVO.class)).build();
 	}
 
 	/**

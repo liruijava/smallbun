@@ -27,7 +27,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.smallbun.fast.manage.config.dao.SysConfigMapper;
 import org.smallbun.fast.manage.config.entity.SysConfigEntity;
 import org.smallbun.fast.manage.config.service.SysConfigService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
