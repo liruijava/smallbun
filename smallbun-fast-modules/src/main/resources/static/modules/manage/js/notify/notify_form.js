@@ -119,6 +119,6 @@ function doSubmit() {
     if ($('.form-horizontal').valid()) {
         var data =  $('.form-horizontal').serializeArray();
         data.push({name:'content',value: editor.getContent()});
-        $.operate.saveCurrentTabPage($('.form-horizontal').attr('action'),data);
+        $.operate.save($('.form-horizontal').attr('action'),data);
     }
 }

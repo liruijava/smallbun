@@ -25,6 +25,7 @@
  * 提交事件
  */
 function doSubmit() {
+
     //获取from表单的值
     var serializeArray = $('.form-horizontal').serializeArray();
     //菜单节点

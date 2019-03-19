@@ -95,7 +95,7 @@
                 <div class="ibox-content-table">
                     <!--查询框-->
                     <form
-                            class="form-inline search search-form" id="search-form" action="" method="post">
+                            class="form-inline search search-form" id="search-form" action="@{/user/page}" method="post">
                         <div class="form-group">
                             <span>姓名：</span>
                             <div class="input-group input-sm width-140">
@@ -201,7 +201,7 @@ layui.use('table', function(){
 			dataName:'data'
 		}
 	    ,cols: [[ 
-	    	{type:'checkbox'},
+	    	{type:'checkbox', fixed: 'left'},
 	    	{field: 'id',style:'display:none;'},
 	        {field: 'jobNumber', title: '工号', align:'center'},
 	        {field: 'username', title: '用户名', align:'center'},
@@ -211,7 +211,7 @@ layui.use('table', function(){
             {field: 'email', title: '邮箱', align:'center'},
             {field: 'org.orgName', title: '部门', align:'center'},
             {field: 'userStatusName', title: '状态', align: 'center'},
-            {fixed: 'right', title: '操作',width:180, align:'center', toolbar: '#barDemo'}
+            {fixed: 'right', title: '操作',width:180, align:'center', toolbar: '#barDemo', fixed: 'right'}
 	    ]],
 		done: function(res, curr, count){
 	    	$("[data-field='id']").css('display','none');
@@ -322,6 +322,31 @@ function add() {
 };
 
 //修改信息
+/* function editTab() {
+                var tab_id = "_tab" + Math.random().toString(36).substring(2);
+                var url = "/404.html";
+                var checkStatus = table.checkStatus('table');
+            	var data = checkStatus.data;
+            	var id= new Array();
+            		for(var item in data){
+            			id.push(data[item].id);
+            		}
+                if ($.common.isNotEmpty(id)) {
+                    url = contextPath + "user/form/{id}".replace("{id}", "?id=" + id);
+                } else {
+                    id = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+                    if (id.length === 0) {
+                        $.modal.alertWarning("请至少选择一条记录");
+                        return;
+                    } else if (id.length > 1) {
+                        $.modal.alertWarning("只能选择一条数据");
+                        return;
+                    } else {
+                        url = contextPath + "user/form/{id}".replace("{id}", "?id=" + id);
+                    }
+                }
+                $.modal.openTab(tab_id, "修改" + $.table._option.modalName, url);
+            }; */
 function edit(){
 	var checkStatus = table.checkStatus('table');
 	var data = checkStatus.data;
@@ -492,7 +517,10 @@ showData();
                 table.reload('table', {
                 	url:contextPath + 'user/page',
                     where: { 
-                    	'fullName':$.trim(fullName)
+                    	 key: {
+                    		 'fullName':$.trim(fullName)
+                           }
+                    	
                     }
                   });
             },
@@ -800,10 +828,15 @@ showData();
                     callback = function (index, layero) {
                         var body = top.layer.getChildFrame('body', index);
                         var iframeWin = layero.find('iframe')[0]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                       console.log(iframeWin);
+                       console.log($(iframeWin).contentWindow)
+                       
                         //文档地址
                         //调用提交方法
-                        alert(iframeWin);
-                        iframeWin.contentWindow.doSubmit();
+                      /*   $.common.isNotEmpty(window.frameElement) ? 
+                       window.frameElement.getAttribute('id').
+                       substring(7, window.frameElement.getAttribute('id').length) : null */
+                       iframeWin.contentWindow.doSubmit();
                     }
                 }
                 layer.open({

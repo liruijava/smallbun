@@ -185,6 +185,6 @@ function doSubmit() {
         $('input:checkbox[id="roleList"]:checked').each(function (i) {
             data.push({"name": "roleVOS[" + i + "].id", "value": $(this).val()});
         });
-        $.operate.saveCurrentTabPage($('.form-horizontal').attr('action'), data);
+        $.operate.save($('.form-horizontal').attr('action'), data);
     }
 }

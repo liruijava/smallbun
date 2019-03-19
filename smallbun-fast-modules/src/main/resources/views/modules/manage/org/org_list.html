@@ -102,7 +102,7 @@ layui.use('table', function(){
 			dataName:'result'
 		}
 	    ,cols: [[ 
-	    	{type:'checkbox'},
+	    	{type:'checkbox', fixed: 'left'},
 	    	{field: 'id',style:'display:none;'},
 	        {field: 'orgName', title: '机构名称', align:'center'},
 	        {field: 'orgCode', title: '机构编码', align:'center'},
@@ -111,7 +111,7 @@ layui.use('table', function(){
 	        {field: 'principal', title: '负责人', align:'center'},
 	        {field: 'telephone', title: '电话', width:180,align:'center'},
 	        {field: 'useableName', title: '是否可用',align: 'center'},
-	        {fixed: 'right', title: '操作',width:180, align:'center', toolbar: '#barDemo'}
+	        {fixed: 'right', title: '操作',width:180, align:'center', toolbar: '#barDemo', fixed: 'right'}
 	    ]],
 		done: function(res, curr, count){
 	    	$("[data-field='id']").css('display','none');
