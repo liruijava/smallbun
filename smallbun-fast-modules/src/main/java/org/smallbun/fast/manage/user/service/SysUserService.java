@@ -28,6 +28,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.smallbun.fast.manage.user.entity.SysUserEntity;
 import org.smallbun.fast.manage.user.vo.SysUserVO;
 import org.smallbun.framework.base.BaseService;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -65,7 +66,8 @@ public interface SysUserService extends BaseService<SysUserEntity> {
 	 * @param vo
 	 * @return
 	 */
-	IPage<SysUserEntity> page(Page<SysUserEntity> page, SysUserVO vo);
+	@Transactional(rollbackFor = Exception.class)
+	IPage<SysUserEntity> selectPage(Page<SysUserEntity> page, SysUserVO vo);
 
 	/**
 	 *修改密码

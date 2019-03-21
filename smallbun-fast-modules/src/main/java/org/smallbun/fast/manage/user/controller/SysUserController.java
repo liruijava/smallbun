@@ -24,7 +24,6 @@
 package org.smallbun.fast.manage.user.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.smallbun.fast.common.PageFactory;
 import org.smallbun.fast.manage.user.entity.SysUserEntity;
@@ -49,6 +48,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -190,8 +191,8 @@ public class SysUserController extends BaseController {
 	@PostMapping(value = "/removeByIds")
 	@PreAuthorize("hasAuthority('manage:user:del')")
 	@LogAnnotation(model = DEL_MODEL + MODEL, action = OperateLogConstant.DEL)
-	public AjaxResult removeByIds(@NotBlank(message = ID_NOT_BLANK_MSG) @RequestParam(value = "ids") List<String> id) {
-		return AjaxResult.builder().result(sysUserService.removeByIds(id)).build();
+	public AjaxResult removeByIds(@NotEmpty(message = ID_NOT_BLANK_MSG) @RequestParam(value = "ids") List<String> ids) {
+		return AjaxResult.builder().result(sysUserService.removeByIds(ids)).build();
 	}
 
 
@@ -204,11 +205,8 @@ public class SysUserController extends BaseController {
 	@AutoQueryDictValue
 	@PostMapping(value = "/page")
 	@LogAnnotation(model = MODEL + SELECT_PAGE_MODEL, action = OperateLogConstant.SELECT_PAGE)
-	public ResponseResult<SysUserEntity> page(Page<SysUserEntity> page, SysUserVO vo) {
-	IPage<SysUserEntity> page1 = sysUserService.page(new PageFactory<SysUserEntity>().defaultPage(page), new QueryWrapper<>(vo));
-		page1.setCurrent(1);
-		page1.setSize(10);
-		return new ResponseResult<>(page1);
+	public ResponseResult<SysUserEntity> selectPage(Page<SysUserEntity> page, SysUserVO vo) {
+		return new ResponseResult<>(sysUserService.selectPage(new PageFactory<SysUserEntity>().defaultPage(page), vo));
 	}
 
 	/**

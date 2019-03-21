@@ -30,6 +30,7 @@
         <result column="username" property="username"/>
         <result column="phone" property="phone"/>
         <result column="org_id" property="orgId"/>
+        <result column="full_name" property="fullName"/>
         <!--用户归属部门-->
         <association property="org" column="org_id" fetchType="eager"
                      select="org.smallbun.fast.manage.org.dao.SysOrgMapper.selectById"/>
@@ -78,7 +79,7 @@
     <!--自定义分页查询-->
    <select id="selectPage" resultMap="userMap">
          select * from sys_user s left join sys_org o on o.id = s.org_id where s.is_deleted=0
-        <!--  <if test="!@org.springframework.util.ObjectUtils@isEmpty(p.orgId)">
+        <if test="!@org.springframework.util.ObjectUtils@isEmpty(p.orgId)">
              and o.id=#{p.orgId} or o.parent_id=#{p.orgId}
          </if> 
         <if test="!@org.springframework.util.ObjectUtils@isEmpty(p.username)"> 
@@ -89,7 +90,7 @@
          </if> 
          <if test="!@org.springframework.util.ObjectUtils@isEmpty(p.birthdayStart) and !@org.springframework.util.ObjectUtils@isEmpty(p.birthdayEnd)">
              and s.birthday between #{p.birthdayStart} and #{p.birthdayEnd} 
-         </if> --> 
+         </if>
     </select> 
     <!--根据ID查询用户-->
     <select id="findById" resultMap="userMap">

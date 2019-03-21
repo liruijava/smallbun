@@ -1,7 +1,7 @@
 <!--
   ~ The MIT License (MIT)
   ~
-  ~ Copyright (c) 2019 ‭‭‭‭‭‭‭‭‭‭‭‭[smallbun] www.smallbun.org
+  ~ Copyright (c) 2019 ????????????[smallbun] www.smallbun.org
   ~
   ~ Permission is hereby granted, free of charge, to any person obtaining a copy of
   ~ this software and associated documentation files (the "Software"), to deal in
@@ -46,18 +46,18 @@
                             onclick="add()">
                         <i class="fa fa-plus"></i>&nbsp;添加
                     </button>
-                    <!--/*/     </th:block>/*/-->
-                    <!--/*/    <th:block sec:authorize="hasAuthority('manage:org:edit')">/*/-->
+                  <!--   <!--/*/     </th:block>/*/-->
+                    /*/    <th:block sec:authorize="hasAuthority('manage:org:edit')">/*/
                     <button type="button" class="btn btn-sm bg-orange"
                             onclick="edit()">
                         <i class="fa fa-file-text-o"></i>&nbsp;修改
                     </button>
-                    <!--/*/     </th:block>/*/-->
-                    <!--/*/      <th:block sec:authorize="hasAuthority('manage:org:del')">/*/-->
+                    /*/     </th:block>/*/
+                    /*/      <th:block sec:authorize="hasAuthority('manage:org:del')">/*/
                     <button type="button" class="btn btn-sm  bg-maroon"
                             onclick="batRemove()"><i
                             class="fa fa-trash-o"></i>&nbsp;删除
-                    </button>
+                    </button> -->
                     <!--/*/     </th:block>/*/-->
                 </div>
             </div>
@@ -82,15 +82,27 @@
 
 <script type="text/javascript" th:inline="none">
 var table;
-layui.use('table', function(){
-	table = layui.table;
-	  
-	  table.render({
+var editObj=null,ptable=null,treeGrid=null,tableId='table',layer=null;
+layui.config({
+    base: 'static/common/js/'
+}).extend({
+    treeGrid:'treeGrid'
+}).use(['jquery','treeGrid','layer'], function(){
+	  var $=layui.jquery;
+      treeGrid = layui.treeGrid;//很重要
+      layer=layui.layer;
+      treeGrid.render({
 	    elem: '#table'
+	    ,idField:'id'
 	    ,height: 520
 	    ,url: contextPath + 'org/list' 
 	    ,method: 'post'
-	    ,page: true
+	    ,page: false
+	    ,iconOpen:false//是否显示图标【默认显示】
+        ,isOpenDefault:true//节点默认是展开还是折叠【默认展开】
+	    ,treeId:'id'//树形id字段名称
+        ,treeUpId:'parentId'//树形父id字段名称
+        ,treeShowName:'orgName'//以树形式显示的字段
 	    ,request: {
 	        pageName: 'current' 
 	        ,limitName: 'size' 
@@ -102,7 +114,7 @@ layui.use('table', function(){
 			dataName:'result'
 		}
 	    ,cols: [[ 
-	    	{type:'checkbox', fixed: 'left'},
+	    	/* {type:'checkbox', fixed: 'left'}, */
 	    	{field: 'id',style:'display:none;'},
 	        {field: 'orgName', title: '机构名称', align:'center'},
 	        {field: 'orgCode', title: '机构编码', align:'center'},
@@ -112,13 +124,29 @@ layui.use('table', function(){
 	        {field: 'telephone', title: '电话', width:180,align:'center'},
 	        {field: 'useableName', title: '是否可用',align: 'center'},
 	        {fixed: 'right', title: '操作',width:180, align:'center', toolbar: '#barDemo', fixed: 'right'}
-	    ]],
+	    ]]
+	    ,parseData:function (res) {//数据加载后回调
+            return res;
+        }
+        ,onClickRow:function (index, o) {
+            console.log(index,o,"单击！");
+        }
+        ,onDblClickRow:function (index, o) {
+            console.log(index,o,"双击");
+        }
+        ,onCheck:function (obj,checked,isAll) {//复选事件
+            console.log(obj,checked,isAll);
+        }
+        ,onRadio:function (obj) {//单选事件
+            console.log(obj);
+        },
 		done: function(res, curr, count){
 	    	$("[data-field='id']").css('display','none');
 	    }
 	  });
+	  
 	 
-		table.on('tool(demo)', function(obj){
+      treeGrid.on('tool(demo)', function(obj){
 		    var data = obj.data;
 		    if(obj.event === 'detail'){
 		    	function view(id, url) {
@@ -130,9 +158,9 @@ layui.use('table', function(){
 		        view();
 		    } else if(obj.event === 'del'){
 		    	function remove(id) {
+		    		var  id = obj.data.id; 
 	                $.modal.confirm("确定删除该条信息吗？", function () {
 	                    var url = contextPath + "org/removeById";
-	                    var  id = obj.data.id; 
 	                    var data = {"id": id};
 	                    $.operate.submit(url, "post", "json", data);
 	                });
@@ -159,7 +187,7 @@ function add() {
 
 //修改信息
 function edit(){
-	var checkStatus = table.checkStatus('table');
+	var checkStatus = treeGrid.checkStatus('table');
 	var data = checkStatus.data;
 	var id= new Array();
 		for(var item in data){
@@ -178,9 +206,9 @@ function edit(){
 	$.modal.open("修改角色", url);
 };
 
-// 删除信息
+/* // 删除信息
  function remove() {
-	var checkStatus = table.checkStatus('table');
+	var checkStatus = treeGrid.checkStatus('table');
 	var data = checkStatus.data;
 	var id= new Array();
 		for(var item in data){
@@ -195,7 +223,7 @@ function edit(){
 
 //批量删除信息
 function batRemove() {
-	var checkStatus = table.checkStatus('table');
+	var checkStatus = treeGrid.checkStatus('table');
 	var data = checkStatus.data;
 	var id= new Array();
 		for(var item in data){
@@ -211,7 +239,7 @@ function batRemove() {
         var data = {"ids": rows.join()};
         $.operate.submit(url, "post", "json", data);   
 	});
-};
+}; */
 </script>
 
 <script type="text/javascript">
@@ -239,11 +267,11 @@ function batRemove() {
                     width: 'auto',
                     height: 'auto',
                     url: options.url,
-                    createUrl: contextPath + "role/form",
-                    updateUrl: contextPath + "role/form/{id}",
-                    removeUrl: contextPath + "role/removeById",
-                    batRemoveUrl: contextPath + "role/removeByIds",
-                    exportUrl: contextPath + "role/export",// 请求后台的URL（*）
+                    createUrl: contextPath + "org/form",
+                    updateUrl: contextPath + "org/form/{id}",
+                    removeUrl: contextPath + "org/removeById",
+                    batRemoveUrl: contextPath + "org/removeByIds",
+                    exportUrl: contextPath + "org/export",// 请求后台的URL（*）
                     contentType: "application/x-www-form-urlencoded",   // 编码类型
                     method: 'post',                                     // 请求方式（*）
                     cache: false,                                       // 是否使用缓存
@@ -795,7 +823,6 @@ function batRemove() {
         operate: {
             // 提交数据
             submit: function (url, type, dataType, data) {
-                $.modal.loading("正在处理中，请稍后...");
                 var config = {
                     url: url,
                     type: type,
@@ -803,12 +830,13 @@ function batRemove() {
                     data: data,
                     success: function (result) {
                         $.operate.ajaxSuccess(result);
-                        table.reload('table', {
+                        treeGrid.reload('table', {
                       	  
                     	});
                     }
                 };
                 $.ajax(config)
+                console.log(console.log(config));
             },
             // post请求传输
             post: function (url, data) {

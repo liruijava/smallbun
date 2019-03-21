@@ -73,7 +73,7 @@ public interface SysUserMapper extends BaseMapper<SysUserEntity> {
 	 * @param vo
 	 * @return
 	 */
-	IPage<SysUserEntity> page(Page<SysUserEntity> page, @Param("p") SysUserVO vo);
+	IPage<SysUserEntity> selectPage(Page<SysUserEntity> page, @Param("p") SysUserVO vo);
 
 	/**
 	 * 根据id进行查询用户

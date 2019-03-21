@@ -127,6 +127,7 @@ layui.use('table', function(){
 	    ,url: contextPath + 'role/page' 
 	    ,method: 'post'
 	    ,page: true
+	    ,idField:'id'
 	    ,request: {
 	        pageName: 'current' 
 	        ,limitName: 'size' 
@@ -152,7 +153,9 @@ layui.use('table', function(){
 	    	$("[data-field='id']").css('display','none');
 	    }
 	  });
-	 
+
+	  
+	  
 		table.on('tool(demo)', function(obj){
 		    var data = obj.data;
 		    if(obj.event === 'detail'){
@@ -355,13 +358,15 @@ function batRemove() {
             // 搜索
              search: function (formId) {
                 var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+                console.log(currentId);
                 var search = {};
+                console.log(search);
                 $.each($("#" + currentId).serializeArray(), function (i, field) {
                     search[field.name] = field.value;
+                    console.log(field);
                 });
                 var roleName=$('#roleName').val();
                 table.reload('table', {
-                	url:contextPath + 'role/page' ,
                     where: { 
                     	'roleName':$.trim(roleName)
                     }
@@ -861,6 +866,7 @@ function batRemove() {
                     	});
                     }
                 };
+                console.log(config);
                 $.ajax(config)
             },
             // post请求传输

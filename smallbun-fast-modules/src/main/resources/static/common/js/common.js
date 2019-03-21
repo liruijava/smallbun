@@ -498,10 +498,8 @@
             },
             // 保存结果提示msg
             saveSuccess: function (result) {
-                if (result.status === web_status.SUCCESS) {
                     $.modal.loading("保存成功,正在刷新数据请稍后……");
                     $.modal.reload();
-                }
                 $.modal.closeLoading();
             },
             //添加tab页
@@ -743,6 +741,7 @@
             },
             // 保存信息
             save: function (url, data) {
+            	alert(8888);
                 $.modal.loading("正在处理中，请稍后...");
                 var config = {
                     url: url,

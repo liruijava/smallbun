@@ -141,8 +141,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserEn
 	 * @return
 	 */
 	@Override
-	public IPage<SysUserEntity> page(Page<SysUserEntity> page, SysUserVO vo) {
-		return baseMapper.page(page, vo);
+	public IPage<SysUserEntity> selectPage(Page<SysUserEntity> page, SysUserVO vo) {
+		return baseMapper.selectPage(page, vo);
 	}
 
 	/**
