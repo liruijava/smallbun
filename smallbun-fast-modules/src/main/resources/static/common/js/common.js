@@ -395,7 +395,6 @@
                         iframeWin.contentWindow.doSubmit();
                     }
                 }
-                alert(url);
                 layer.open({
                     type: 2,
                     area: [width + 'px', height + 'px'],
@@ -495,6 +494,10 @@
             // 重新加载
             reload: function () {
                 parent.location.reload();
+            },
+            // 当前页重新加载
+            nowreload: function () {
+                location.reload();
             },
             // 保存结果提示msg
             saveSuccess: function (result) {
@@ -741,7 +744,6 @@
             },
             // 保存信息
             save: function (url, data) {
-            	alert(8888);
                 $.modal.loading("正在处理中，请稍后...");
                 var config = {
                     url: url,
@@ -756,10 +758,8 @@
             },
             // 保存结果弹出msg刷新table表格
             ajaxSuccess: function (result) {
-                if (result.status === web_status.SUCCESS) {
                     $.modal.msgSuccess(result.msg);
-                    $.table.refresh();
-                }
+                    $.modal.nowreload();
                 $.modal.closeLoading();
             }
         },
@@ -1232,6 +1232,7 @@
                     /**
                      * 弹出layer
                      */
+                   
                     layer.open({
                         type: 1,
                         offset: '50px',
