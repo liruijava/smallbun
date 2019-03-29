@@ -131,9 +131,9 @@
                            data-mobile-responsive="true"  ></table>
                
                <script id="barDemo" type="text/html">
-  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-primary" lay-event="detail">查看</a>
-  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-normal" lay-event="edit">修改</a>
-  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger" lay-event="del">删除</a>
+  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-primary" onclick="tableOn()" lay-event="detail">查看</a>
+  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-normal" onclick="tableOn()" lay-event="edit">修改</a>
+  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger" onclick="tableOn()" lay-event="del">删除</a>
 					</script> 
 					
 					
@@ -151,6 +151,7 @@
 <script src="../static/common/plugins/layui/layui.js"></script>
 <script src="../static/common/plugins/layui/layui.all.js"></script>
 <script src="../static/common/js/common.js"></script>
+<script src="../static/common/js/table.js"></script>
 
 <script>
 	$(function() {
@@ -184,76 +185,31 @@
 	});
 </script>
 <script type="text/javascript" th:inline="none">
+
 var table;
 layui.use('table', function(){
 	table = layui.table;
 	  
-	  table.render({
-	    elem: '#table'
-	    ,height: 530
-	    ,url: contextPath + 'user/page' 
-	    ,method: 'post'
-	    ,page: true
-	    ,colFilterRecord: true
-	    ,toolbar: '#toolbarDemo'
-	    ,request: {
-	        pageName: 'current' 
-	        ,limitName: 'size' 
-	      }
-		,response:{
-			countName: 'total',
-			statusName:'status',
-			statusCode:'200',
-			dataName:'data'
-		}
-	    ,cols: [[ 
-	    	{type:'checkbox', fixed: 'left'},
-	    	{field: 'id',style:'display:none;'},
-	        {field: 'jobNumber', title: '工号', align:'center'},
-	        {field: 'username', title: '用户名', align:'center'},
-            {field: 'fullName', title: '姓名', align:'center'},
-            {field: 'phone', title: '手机', align:'center'},
-            {field: 'telephone', title: '电话', align:'center'},
-            {field: 'email', title: '邮箱', align:'center'},
-            {field: 'org.orgName', title: '部门', align:'center'},
-            {field: 'userStatusName', title: '状态', align: 'center'},
-            {fixed: 'right', title: '操作',width:180, align:'center', toolbar: '#barDemo', fixed: 'right'}
-	    ]],
-		done: function(res, curr, count){
-	    	$("[data-field='id']").css('display','none');
-	    	console.log(res);
-	    }
-	  });
+	  table.render(initOpt(
+			 {
+				url:contextPath + 'user/page',
+				cols:[[ 
+			    	{type:'checkbox', fixed: 'left'},
+			    	{field: 'id',style:'display:none;'},
+			        {field: 'jobNumber', title: '工号', align:'center'},
+			        {field: 'username', title: '用户名', align:'center'},
+		            {field: 'fullName', title: '姓名', align:'center'},
+		            {field: 'phone', title: '手机', align:'center'},
+		            {field: 'telephone', title: '电话', align:'center'},
+		            {field: 'email', title: '邮箱', align:'center'},
+		            {field: 'org.orgName', title: '部门', align:'center'},
+		            {field: 'userStatusName', title: '状态', align: 'center'},
+		            {fixed: 'right', title: '操作',width:180, align:'center', toolbar: '#barDemo', fixed: 'right'}
+			    ]]
+			 } 
+	  ));
 	 
-		table.on('tool(demo)', function(obj){
-		    var data = obj.data;
-		    if(obj.event === 'detail'){
-		    	function view(id, url) {
-		    		var  id = obj.data.id;  
-		    		var  url = contextPath +"user/form";
-		    			url = url + "?id=" + id;
-		    		$.modal.view("查看用户" , url);
-		        }
-		        view();
-		    } else if(obj.event === 'del'){
-		    	function remove(id) {
-	                $.modal.confirm("确定删除该条信息吗？", function () {
-	                    var url = contextPath + "user/removeById";
-	                    var  id = obj.data.id; 
-	                    var data = {"id": id};
-	                    $.operate.submit(url, "post", "json", data);
-	                });
-	            }
-		    	remove();
-		    } else if(obj.event === 'edit'){
-		    	function edit(id) {
-		    		var  id = obj.data.id;
-	               	var url =  contextPath + "user/form/{id}".replace("{id}", "?id=" + id);
-	                $.modal.open("修改用户", url);
-	            }
-		    	edit();
-		    }
-		});
+		
 		
 		
 });
@@ -338,71 +294,15 @@ laydate.render({
 });
 
 </script>
-
-
 <script type="text/javascript">
-//添加信息
-function add() {
-    var url = contextPath + "user/form";
-    $.modal.open("添加用户", url);
-};
-
-//修改信息
-function edit(){
-	var checkStatus = table.checkStatus('table');
-	var data = checkStatus.data;
-	var id= new Array();
-		for(var item in data){
-			id.push(data[item].id);
-		}
-	console.log(id.length+"条数据");
-	if  (id.length === 0) {
-		$.modal.alertWarning("请至少选择一条记录");
-		return;
-	}else if (id.length > 1) {
-		$.modal.alertWarning("只能选择一条数据");
-		return;
-	}else {
-		url = contextPath + "user/form/{id}".replace("{id}", "?id=" + id);
-	}
-	$.modal.open("修改用户", url);
-};
-
-
-// 删除信息
- function remove(id) {
-	var checkStatus = table.checkStatus('table');
-	var data = checkStatus.data;
-	var id= new Array();
-		for(var item in data){
-			id.push(data[item].id);
-		}
-    $.modal.confirm("确定删除该条信息吗？", function () {
-        var url = contextPath + "user/removeById";
-        var data = {"id": id};
-        $.operate.submit(url, "post", "json", data);
-    });
-};
-
-//批量删除信息
-function batRemove(id) {
-	var checkStatus = table.checkStatus('table');
-	var data = checkStatus.data;
-	var id= new Array();
-		for(var item in data){
-			id.push(data[item].id);
-		}
-	var rows = id;
-    if (rows.length === 0) {
-    	$.modal.alertWarning("请至少选择一条记录");
-        return;
-    }
-    $.modal.confirm("确认要删除选中的" + rows.length + "条数据吗?", function () {
-    	var url = contextPath + "user/removeByIds";
-        var data = {"ids": rows.join()};
-        $.operate.submit(url, "post", "json", data);   
-	});
-};
+	var urlss = {
+		title:"用户",
+		viewUrl:contextPath +"user/form",
+		removeUrl:contextPath + "user/removeById",
+		editUrl:contextPath + "user/form/{id}",
+		removesUrl:contextPath + "user/removeByIds",
+		addUrl:contextPath + "user/form"
+	};
 </script>
 
 </html>

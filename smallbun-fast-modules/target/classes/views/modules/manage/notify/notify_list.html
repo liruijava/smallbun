@@ -103,9 +103,9 @@
                            data-mobile-responsive="true"  ></table>
                            
                     <script id="barDemo" type="text/html">
-  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-primary" lay-event="detail">查看</a>
-  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-normal" lay-event="edit">修改</a>
-  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger" lay-event="del">删除</a>
+  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-primary" onclick="tableOn()" lay-event="detail">查看</a>
+  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-normal" onclick="tableOn()" lay-event="edit">修改</a>
+  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger" onclick="tableOn()" lay-event="del">删除</a>
 					</script> 
                 </div>
             </div>
@@ -118,46 +118,16 @@
 <div th:include="fragments/include :: bootstrap-table-js"></div>
 <script src="../static/common/plugins/layui/layui.js"></script>
 <script src="../static/common/js/common.js"></script>
+<script src="../static/common/js/table.js"></script>
 
-<script type="text/javascript">
-function showData(data) {
-	var url = contextPath + 'notify/page';
-	var json = {};
-	$.ajax({
-		"url": url,
-		"data":json,
-		"type": "POST",
-		"success": function(data) {
-				console.log(data);
-			}
-	});
-}
-
-showData();
-</script>
 <script type="text/javascript" th:inline="none">
 var table;
 layui.use('table', function(){
 	table = layui.table;
 	  
-	  table.render({
-	    elem: '#table'
-	    ,height: 530
-	    ,url: contextPath + 'notify/page' 
-	    ,method: 'post'
-	    ,colFilterRecord: true
-	  	,toolbar: '#toolbarDemo'
-	    ,page: true
-	    ,request: {
-	        pageName: 'current' 
-	        ,limitName: 'size' 
-	      }
-		,response:{
-			countName: 'total',
-			statusName:'status',
-			statusCode:'200',
-			dataName:'data'
-		}
+	  table.render(initOpt(
+			  {
+	    url: contextPath + 'notify/page' 
 	    ,cols: [[ 
 	    	{type:'checkbox', fixed: 'left'},
 	    	{field: 'id',style:'display:none;'},
@@ -165,108 +135,23 @@ layui.use('table', function(){
             {field: 'notifyGenre', title: '类型', sortable: true},
             {field: 'gmtModified', title: '更新时间', sortable: true},
 	        {fixed: 'right', title: '操作',width:180, align:'center', toolbar: '#barDemo', fixed: 'right'}
-	    ]],
-		done: function(res, curr, count){
-	    	$("[data-field='id']").css('display','none');
-	    }
-	  });
+	    ]]
+	  }
+	  ));
 	 
-		table.on('tool(demo)', function(obj){
-		    var data = obj.data;
-		    if(obj.event === 'detail'){
-		    	function view(id, url) {
-		    		var  id = obj.data.id;  
-		    		var  url = contextPath + "notify/form";
-		                 url = url + "?id=" + id;
-		            $.modal.view("查看角色" , url);
-		        }
-		        view();
-		    } else if(obj.event === 'del'){
-		    	function remove(id) {
-	                $.modal.confirm("确定删除该条信息吗？", function () {
-	                    var url = contextPath + "notify/removeById";
-	                    var  id = obj.data.id; 
-	                    var data = {"id": id};
-	                    $.operate.submit(url, "post", "json", data);
-	                });
-	            }
-		    	remove();
-		    } else if(obj.event === 'edit'){
-		    	function edit(id) {
-		    		var  id = obj.data.id;
-	               	var url =contextPath + "notify/form/{id}".replace("{id}", "?id=" + id);
-	                $.modal.open("修改角色", url);
-	            }
-		    	edit();
-		    }
-		});
 });
 </script>
 
 <script type="text/javascript">
-//添加信息
-function add() {
-    var url = contextPath + "notify/form";
-    $.modal.open("添加角色", url);
-};
-
-//修改信息
-function edit(){
-	var checkStatus = table.checkStatus('table');
-	var data = checkStatus.data;
-	var id= new Array();
-		for(var item in data){
-			id.push(data[item].id);
-		}
-	console.log(id.length+"条数据");
-	if  (id.length === 0) {
-		$.modal.alertWarning("请至少选择一条记录");
-		return;
-	}else if (id.length > 1) {
-		$.modal.alertWarning("只能选择一条数据");
-		return;
-	}else {
-		url = contextPath + "notify/form/{id}".replace("{id}", "?id=" + id);
-	}
-	$.modal.open("修改角色", url);
-};
-
-// 删除信息
- function remove() {
-	var checkStatus = table.checkStatus('table');
-	var data = checkStatus.data;
-	var id= new Array();
-		for(var item in data){
-			id.push(data[item].id);
-		}
-    $.modal.confirm("确定删除该条信息吗？", function () {
-        var url = contextPath + "notify/removeById";
-        var data = {"id": id};
-        $.operate.submit(url, "post", "json", data);
-    });
-};
-
-//批量删除信息
-function batRemove() {
-	var checkStatus = table.checkStatus('table');
-	var data = checkStatus.data;
-	var id= new Array();
-		for(var item in data){
-			id.push(data[item].id);
-		}
-	var rows = id;
-    if (rows.length === 0) {
-    	$.modal.alertWarning("请至少选择一条记录");
-        return;
-    }
-    $.modal.confirm("确认要删除选中的" + rows.length + "条数据吗?", function () {
-    	var url = contextPath + "notify/removeByIds";
-        var data = {"ids": rows.join()};
-        $.operate.submit(url, "post", "json", data);   
-	});
-};
+	var urlss = {
+		title:"通知",
+		viewUrl:contextPath +"notify/form",
+		removeUrl:contextPath + "notify/removeById",
+		editUrl:contextPath + "notify/form/{id}",
+		removesUrl:contextPath + "notify/removeByIds",
+		addUrl:contextPath + "notify/form"
+	};
 </script>
-
 
 
 </html>

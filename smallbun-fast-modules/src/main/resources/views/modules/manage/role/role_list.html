@@ -62,18 +62,6 @@
                                 onclick="batRemove()"><i
                                 class="fa fa-trash-o"></i> 删除
                         </button>
-                        <!--/*/</th:block>/*/-->
-                        <!-- <div class="btn-group">
-                            <button type="button" class="btn ibtn-white btn-sm dropdown-toggle" data-toggle="dropdown"
-                                    aria-expanded="false" data-placement="left"
-                                    title="更多操作">
-                                更多操作<span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a href="javascript:" onclick="$.table.exportExcel()"><i class="glyphicon glyphicon-export" ></i> 导出</a></li>
-                                <li><a href="javascript:" onclick="$.table.importExcel()"><i class="glyphicon glyphicon-import" ></i> 导入</a></li>
-                            </ul>
-                        </div> -->
                     </div>
                 </div>
                 <!--盒子内容-->
@@ -98,9 +86,9 @@
                            data-mobile-responsive="true"  ></table>
                            
                     <script id="barDemo" type="text/html">
-  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-primary" lay-event="detail">查看</a>
-  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-normal" lay-event="edit">修改</a>
-  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger" lay-event="del">删除</a>
+  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-primary" onclick="tableOn()" lay-event="detail">查看</a>
+  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-normal" onclick="tableOn()" lay-event="edit">修改</a>
+  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger" onclick="tableOn()" lay-event="del">删除</a>
 					</script> 
                 </div>
             </div>
@@ -116,32 +104,16 @@
 <script src="../static/common/plugins/layui/layui.js"></script>
 <script src="../static/common/plugins/layui/layui.all.js"></script>
 <script src="../static/common/js/common.js"></script>
+<script src="../static/common/js/table.js"></script>
 
 <script type="text/javascript" th:inline="none">
 var table;
 layui.use('table', function(){
 	table = layui.table;
 	  
-	  table.render({
-	    elem: '#table'
-	    ,height: 530
-	    ,url: contextPath + 'role/page' 
-	    ,method: 'post'
-	    ,page: true
-	    ,colFilterRecord: true
-	    ,toolbar: '#toolbarDemo'
-	    ,idField:'id'
-	    ,request: {
-	        pageName: 'current' 
-	        ,limitName: 'size' 
-	      }
-		,response:{
-			countName: 'total',
-			statusName:'status',
-			statusCode:'200',
-			dataName:'data'
-		}
-	    ,cols: [[ 
+	  table.render(initOpt({
+	    url: contextPath + 'role/page' ,
+	    cols: [[ 
 	    	{type:'checkbox', fixed: 'left'},
 	    	{field: 'id',style:'display:none;'},
 	        {field: 'roleName', title: '角色名称', align:'center'},
@@ -151,43 +123,12 @@ layui.use('table', function(){
 	        {field: 'useable', title: '是否可用', align:'center'},
 	        {field: 'gmtModified', title: '更新时间', width:180,align:'center'},
 	        {fixed: 'right', title: '操作',width:180, align:'center', toolbar: '#barDemo', fixed: 'right'}
-	    ]],
-		done: function(res, curr, count){
-	    	$("[data-field='id']").css('display','none');
-	    }
-	  });
+	        ]]
+	  }
+	  ));
 
 	  
-	  
-		table.on('tool(demo)', function(obj){
-		    var data = obj.data;
-		    if(obj.event === 'detail'){
-		    	function view(id, url) {
-		    		var  id = obj.data.id;  
-		    		var  url = contextPath + "role/form";
-		                 url = url + "?id=" + id;
-		            $.modal.view("查看角色" , url);
-		        }
-		        view();
-		    } else if(obj.event === 'del'){
-		    	function remove(id) {
-	                $.modal.confirm("确定删除该条信息吗？", function () {
-	                    var url = contextPath + "role/removeById";
-	                    var  id = obj.data.id; 
-	                    var data = {"id": id};
-	                    $.operate.submit(url, "post", "json", data);
-	                });
-	            }
-		    	remove();
-		    } else if(obj.event === 'edit'){
-		    	function edit(id) {
-		    		var  id = obj.data.id;
-	               	var url =contextPath + "role/form/{id}".replace("{id}", "?id=" + id);
-	                $.modal.open("修改角色", url);
-	            }
-		    	edit();
-		    }
-		});
+	 
 });
 
 // 搜索
@@ -212,84 +153,15 @@ search: function (formId) {
 </script>
 
 <script type="text/javascript">
-function showData(data) {
-	var url = contextPath + 'role/page';
-	var json = {};
-	$.ajax({
-		"url": url,
-		"data":json,
-		"type": "POST",
-		"success": function(data) {
-				console.log(data);
-			}
-	});
-}
-
-showData();
+	var urlss = {
+		title:"角色",
+		viewUrl:contextPath +"role/form",
+		removeUrl:contextPath + "role/removeById",
+		editUrl:contextPath + "role/form/{id}",
+		removesUrl:contextPath + "role/removeByIds",
+		addUrl:contextPath + "role/form"
+	};
 </script>
 
-<script type="text/javascript">
-//添加信息
-function add() {
-    var url = contextPath + "role/form";
-    $.modal.open("添加角色", url);
-};
-
-//修改信息
-function edit(){
-	var checkStatus = table.checkStatus('table');
-	var data = checkStatus.data;
-	var id= new Array();
-		for(var item in data){
-			id.push(data[item].id);
-		}
-	console.log(id.length+"条数据");
-	if  (id.length === 0) {
-		$.modal.alertWarning("请至少选择一条记录");
-		return;
-	}else if (id.length > 1) {
-		$.modal.alertWarning("只能选择一条数据");
-		return;
-	}else {
-		url = contextPath + "role/form/{id}".replace("{id}", "?id=" + id);
-	}
-	$.modal.open("修改角色", url);
-};
-
-// 删除信息
- function remove() {
-	var checkStatus = table.checkStatus('table');
-	var data = checkStatus.data;
-	var id= new Array();
-		for(var item in data){
-			id.push(data[item].id);
-		}
-    $.modal.confirm("确定删除该条信息吗？", function () {
-        var url = contextPath + "role/removeById";
-        var data = {"id": id};
-        $.operate.submit(url, "post", "json", data);
-    });
-};
-
-//批量删除信息
-function batRemove() {
-	var checkStatus = table.checkStatus('table');
-	var data = checkStatus.data;
-	var id= new Array();
-		for(var item in data){
-			id.push(data[item].id);
-		}
-	var rows = id;
-    if (rows.length === 0) {
-    	$.modal.alertWarning("请至少选择一条记录");
-        return;
-    }
-    $.modal.confirm("确认要删除选中的" + rows.length + "条数据吗?", function () {
-    	var url = contextPath + "role/removeByIds";
-        var data = {"ids": rows.join()};
-        $.operate.submit(url, "post", "json", data);   
-	});
-};
-</script>
 
 </html>

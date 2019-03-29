@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Layui 测试</title>
     <link rel="stylesheet" href="/static/common/plugins/layui/css/layui.css" media="all">
 </head>
 <body>
@@ -83,7 +83,7 @@
 		<div class="layui-tab-content" style="height: 100px;">
 			<div class="layui-tab-item layui-show">内容不一样是要有，因为你可以监听tab事件（阅读下文档就是了）</div>
 			<div class="layui-tab-item" lay-filter="demo"><table id="demo" class="layui-hide"> </table></div>
-			<div class="layui-tab-item"><button onclick="frame()">iframe</button></div>
+			<div class="layui-tab-item"><button onclick="iframe()">iframe</button></div>
 			<div class="layui-tab-item">内容4</div>
 			<div class="layui-tab-item">内容5</div>
 		</div>
@@ -93,15 +93,26 @@
   <div class="layui-progress-bar" lay-percent="0%"></div>
 </div>
 </body>
+<script src="../static/common/plugins/jquery-3.1.1.min.js"></script>
 <script src="../static/common/plugins/layui/layui.js"></script>
 <script src="../static/common/plugins/layui/layui.all.js"></script>
 <script src="../static/common/js/iframe.js"></script>
 
-<script>
+<script type="text/javascript">
+function iframe(){
+	options = {
+	  		url: "https://www.baidu.com",
+	    	title: "这是一个iframe",
+	    	width: '1000',
+	    	height: '700',
+	}
+	frame(options);
+}
+</script>
 
+<script>
 layui.use(['form', 'layedit', 'laydate'], function(){
   var form = layui.form
-  ,layer = layui.layer
   ,layedit = layui.layedit
   ,laydate = layui.laydate;
 
@@ -265,6 +276,5 @@ layui.use('table', function(){
   });
 });
 </script>
- 
 
 </html>
