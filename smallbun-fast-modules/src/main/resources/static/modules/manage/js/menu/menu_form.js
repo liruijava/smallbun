@@ -70,7 +70,7 @@ function iconConfirm(index, layero) {
 function doSubmit() {
     // 手动触发校验代码
     if ($('.form-horizontal').valid()) {
-        $.operate.saveCurrentTabPage($('.form-horizontal').attr('action'), $('.form-horizontal').serializeArray());
+        $.operate.save($('.form-horizontal').attr('action'), $('.form-horizontal').serializeArray());
     }
 }
 

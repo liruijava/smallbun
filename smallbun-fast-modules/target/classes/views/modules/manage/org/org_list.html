@@ -37,10 +37,10 @@
             <h5>部门管理</h5>
             <div class="pull-right">
                 <div class="pull-left">
-                  <!--   <button type="button" id="expandAllBtn" class="btn btn-sm ibtn-primary"
+                   <!--  <button type="button" id="expandAllBtn" class="btn btn-sm ibtn-primary"
                             onclick="$.treeTable.expandOrCollapse()">
                         <i class="fa fa-exchange"></i>&nbsp;展开/折叠
-                    </button> -->
+                    </button> --> 
                     <!--/*/  <th:block sec:authorize="hasAuthority('manage:org:add')">/*/-->
                     <button type="button" class="btn btn-sm  ibtn-info"
                             onclick="add()">
@@ -66,11 +66,11 @@
         <div class="ibox-content-table">
              <table id="table" lay-filter="demo" class="table table-bordered table-striped"
                            data-mobile-responsive="true"  ></table>
-          <script id="barDemo" type="text/html">
+          	<script id="barDemo" type="text/html">
   						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-primary" lay-event="detail">查看</a>
   						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-normal" lay-event="edit">修改</a>
   						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger" lay-event="del">删除</a>
-					</script> 
+			</script> 
         </div>
     </div>
 </section>
@@ -81,6 +81,8 @@
 <script src="../static/common/plugins/layui/layui.js"></script>
 <script src="../static/common/plugins/layui/layui.all.js"></script>
 <script src="../static/common/js/common.js"></script>
+<script src="../static/common/js/table.js"></script>
+
 <script type="text/javascript" th:inline="none">
 var table;
 var editObj=null,ptable=null,treeGrid=null,tableId='table',layer=null;
@@ -92,31 +94,12 @@ layui.config({
 	  var $=layui.jquery;
       treeGrid = layui.treeGrid;//很重要
       layer=layui.layer;
-      treeGrid.render({
-	    elem: '#table'
-	    ,idField:'id'
-	    ,height: 520
-	    ,url: contextPath + 'org/list' 
-	    ,method: 'post'
-	    ,page: false
-	    ,iconOpen:false//是否显示图标【默认显示】
-        ,isOpenDefault:true//节点默认是展开还是折叠【默认展开】
-	    ,treeId:'id'//树形id字段名称
-        ,treeUpId:'parentId'//树形父id字段名称
+      treeGrid.render(initOptTree({
+	    url: contextPath + 'org/list' 
         ,treeShowName:'orgName'//以树形式显示的字段
-	    ,request: {
-	        pageName: 'current' 
-	        ,limitName: 'size' 
-	      }
-		,response:{
-			countName: 'total',
-			statusName:'status',
-			statusCode:'200',
-			dataName:'result'
-		}
 	    ,cols: [[ 
 	    	/* {type:'checkbox', fixed: 'left'}, */
-	    	{field: 'id',style:'display:none;'},
+	    	{field: 'id',hide:true},
 	        {field: 'orgName', title: '机构名称', align:'center'},
 	        {field: 'orgCode', title: '机构编码', align:'center'},
 	        {field: 'orgTypeName', title: '机构类型', align:'center'},
@@ -126,67 +109,22 @@ layui.config({
 	        {field: 'useableName', title: '是否可用',align: 'center'},
 	        {fixed: 'right', title: '操作',width:180, align:'center', toolbar: '#barDemo', fixed: 'right'}
 	    ]]
-	    ,parseData:function (res) {//数据加载后回调
-            return res;
-        }
-        ,onClickRow:function (index, o) {
-            console.log(index,o,"单击！");
-        }
-        ,onDblClickRow:function (index, o) {
-            console.log(index,o,"双击");
-        }
-        ,onCheck:function (obj,checked,isAll) {//复选事件
-            console.log(obj,checked,isAll);
-        }
-        ,onRadio:function (obj) {//单选事件
-            console.log(obj);
-        },
-		done: function(res, curr, count){
-	    	$("[data-field='id']").css('display','none');
-	    }
-	  });
+	  }
+      ));
 	  
 	 
-      treeGrid.on('tool(demo)', function(obj){
-		    var data = obj.data;
-		    if(obj.event === 'detail'){
-		    	function view(id, url) {
-		    		var  id = obj.data.id;  
-		    		var  url = contextPath + "org/form";
-		                 url = url + "?id=" + id;
-		            $.modal.view("查看部门" , url);
-		        }
-		        view();
-		    } else if(obj.event === 'del'){
-		    	function remove(id) {
-		    		var  id = obj.data.id; 
-	                $.modal.confirm("确定删除该条信息吗？", function () {
-	                    var url = contextPath + "org/removeById";
-	                    var data = {"id": id};
-	                    $.operate.submit(url, "post", "json", data);
-	                });
-	            }
-		    	remove();
-		    } else if(obj.event === 'edit'){
-		    	function edit(id) {
-		    		var  id = obj.data.id;
-	               	var url = url = contextPath + "org/form/{id}".replace("{id}", "?id=" + id);;
-	                $.modal.open("修改部门", url);
-	            }
-		    	edit();
-		    }
-		});
+tableTreeOn();
 });
 </script>
 
 <script type="text/javascript">
-//添加信息
-function add() {
-    var url = contextPath + "org/form";
-    $.modal.open("添加部门", url);
-};
-
+	var urlss = {
+		title:"部门",
+		viewUrl:contextPath +"org/form",
+		removeUrl:contextPath + "org/removeById",
+		editUrl:contextPath + "org/form/{id}",
+		removesUrl:contextPath + "org/removeByIds",
+		addUrl:contextPath + "org/form"
+	};
 </script>
-
-
 </html>

@@ -38,10 +38,10 @@
                     <h5>通知公告</h5>
                     <div class="pull-right">
                         <!--/*/<th:block sec:authorize="hasAuthority('manage:notify:query')">/*/-->
-                       <!--  <button class="btn btn-sm ibtn-primary query-a" title="查询" data-toggle="tooltip"
+                       <button class="btn btn-sm ibtn-primary query-a" title="查询" data-toggle="tooltip"
                                 data-placement="left">
                             <i class="fa fa-filter"></i> 查询
-                        </button> -->
+                        </button>
                         <!--/*/</th:block>/*/-->
                         <!--/*/<th:block sec:authorize="hasAuthority('manage:notify:add')">/*/-->
                         <button type="button" class="btn btn-sm ibtn-info" data-toggle="tooltip" data-placement="left"
@@ -61,18 +61,6 @@
                                 onclick="batRemove()"><i
                                 class="fa fa-trash-o"></i> 删除
                         </button>
-                        <!--/*/</th:block>/*/-->
-                       <!--  <div class="btn-group">
-                            <button type="button" class="btn ibtn-white btn-sm dropdown-toggle" data-toggle="dropdown"
-                                    aria-expanded="false" data-placement="left"
-                                    title="更多操作">
-                                更多操作<span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a href="javascript:"><i class="glyphicon glyphicon-export"></i> 导出</a></li>
-                                <li><a href="javascript:"><i class="glyphicon glyphicon-import"></i> 导入</a></li>
-                            </ul>
-                        </div> -->
                     </div>
                 </div>
                 <!--盒子内容-->
@@ -81,21 +69,14 @@
                     <form class="form-inline search search-form" id="search-form" th:action="@{/notify/page}"
                           method="post">
                         <div class="form-group">
-                            <span>字典名称：</span>
+                            <span>标题：</span>
                             <div class="input-group input-sm width-140">
-                                <input id="typeName" name="typeName" type="text"
+                                <input id="title" name="title" type="text"
                                        class="form-control" autocomplete="off">
                             </div>
                         </div>
-                        <!-- <div class="form-group">
-                            <span>字典值：</span>
-                            <div class="input-group input-sm width-140">
-                                <input id="typeCode" name="typeCode" type="text"
-                                       class="form-control" autocomplete="off">
-                            </div>
-                        </div> -->
                         <div class="form-group">
-                            <a class="btn ibtn-white btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn ibtn-white btn-sm" onclick="tables.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                             <a class="btn ibtn-white btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                         </div>
                     </form>
@@ -103,9 +84,9 @@
                            data-mobile-responsive="true"  ></table>
                            
                     <script id="barDemo" type="text/html">
-  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-primary" onclick="tableOn()" lay-event="detail">查看</a>
-  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-normal" onclick="tableOn()" lay-event="edit">修改</a>
-  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger" onclick="tableOn()" lay-event="del">删除</a>
+  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-primary" lay-event="detail">查看</a>
+  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-normal" lay-event="edit">修改</a>
+  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger" lay-event="del">删除</a>
 					</script> 
                 </div>
             </div>
@@ -117,6 +98,7 @@
 <div th:include="fragments/include :: include-js"></div>
 <div th:include="fragments/include :: bootstrap-table-js"></div>
 <script src="../static/common/plugins/layui/layui.js"></script>
+<script src="../static/common/plugins/layui/layui.all.js"></script>
 <script src="../static/common/js/common.js"></script>
 <script src="../static/common/js/table.js"></script>
 
@@ -124,13 +106,11 @@
 var table;
 layui.use('table', function(){
 	table = layui.table;
-	  
-	  table.render(initOpt(
-			  {
+	  table.render(initOpt({
 	    url: contextPath + 'notify/page' 
 	    ,cols: [[ 
 	    	{type:'checkbox', fixed: 'left'},
-	    	{field: 'id',style:'display:none;'},
+	    	{field: 'id',hide:true},
 	        {field: 'title', title: '标题', formatter: $.table.view, sortable: true},
             {field: 'notifyGenre', title: '类型', sortable: true},
             {field: 'gmtModified', title: '更新时间', sortable: true},
@@ -140,6 +120,21 @@ layui.use('table', function(){
 	  ));
 	 
 });
+
+
+//搜索
+var tables = {
+	search : function(formId) {
+		var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+		console.log($('#'+currentId).serializeObject());
+		table.reload('table', {
+		 	where:$('#'+currentId).serializeObject()
+		})
+	}
+}
+
+//行工具栏方法加载
+tableOn();
 </script>
 
 <script type="text/javascript">

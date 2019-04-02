@@ -170,9 +170,9 @@ public class SysMenuController extends BaseController {
 	@AutoQueryDictValue
 	@PostMapping(value = "/list")
 	@LogAnnotation(model = MODEL + SELECT_LIST_MODEL, action = OperateLogConstant.SELECT_PAGE)
-	public AjaxResult list(SysMenuVO vo) {
+	public AjaxResult list() {
 		return AjaxResult.builder().result(excludeZtreeChildrenField(
-				mappingList(menuService.list(new QueryWrapper<SysMenuEntity>(vo).orderByAsc("sort")), new ArrayList<>(),
+				mappingList(menuService.list(new QueryWrapper<>()), new ArrayList<>(),
 						SysMenuVO.class))).build();
 	}
 

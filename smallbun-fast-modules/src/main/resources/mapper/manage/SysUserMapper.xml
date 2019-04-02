@@ -81,7 +81,10 @@
          select * from sys_user s left join sys_org o on o.id = s.org_id where s.is_deleted=0
         <if test="!@org.springframework.util.ObjectUtils@isEmpty(p.orgId)">
              and o.id=#{p.orgId} or o.parent_id=#{p.orgId}
-         </if> 
+         </if>
+         <if test="!@org.springframework.util.ObjectUtils@isEmpty(p.fullName)"> 
+             and s.full_name like CONCAT('%',#{p.fullName},'%') 
+        </if>
         <if test="!@org.springframework.util.ObjectUtils@isEmpty(p.username)"> 
              and s.username like CONCAT('%',#{p.username},'%') 
         </if>

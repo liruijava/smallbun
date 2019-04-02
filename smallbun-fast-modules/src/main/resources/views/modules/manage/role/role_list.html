@@ -86,9 +86,9 @@
                            data-mobile-responsive="true"  ></table>
                            
                     <script id="barDemo" type="text/html">
-  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-primary" onclick="tableOn()" lay-event="detail">查看</a>
-  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-normal" onclick="tableOn()" lay-event="edit">修改</a>
-  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger" onclick="tableOn()" lay-event="del">删除</a>
+  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-primary" lay-event="detail">查看</a>
+  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-normal"  lay-event="edit">修改</a>
+  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger"  lay-event="del">删除</a>
 					</script> 
                 </div>
             </div>
@@ -115,7 +115,7 @@ layui.use('table', function(){
 	    url: contextPath + 'role/page' ,
 	    cols: [[ 
 	    	{type:'checkbox', fixed: 'left'},
-	    	{field: 'id',style:'display:none;'},
+	    	{field: 'id',hide:true},
 	        {field: 'roleName', title: '角色名称', align:'center'},
 	        {field: 'enName', title: '角色编码', align:'center'},
 	        {field: 'roleType', title: '角色类型', align:'center'},
@@ -132,24 +132,18 @@ layui.use('table', function(){
 });
 
 // 搜索
-var tables = {
-search: function (formId) {
-   var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
-   console.log(currentId);
-   var search = {};
-   console.log(search);
-   $.each($("#" + currentId).serializeArray(), function (i, field) {
-       search[field.name] = field.value;
-       console.log(field);
-   });
-   var roleName=$('#roleName').val();
-   table.reload('table', {
-       where: { 
-       	'roleName':$.trim(roleName)
-       }
-     });
-}
-}
+	var tables = {
+			search : function(formId) {
+				var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+				console.log($('#'+currentId).serializeObject());
+				table.reload('table', {
+				 	where:$('#'+currentId).serializeObject()
+				})
+			}
+	}
+	
+//行工具栏方法加载
+tableOn();
 </script>
 
 <script type="text/javascript">

@@ -25,17 +25,20 @@ package org.smallbun.fast.manage.dict.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.smallbun.fast.common.PageFactory;
 import org.smallbun.fast.manage.dict.entity.SysDictTypeEntity;
 import org.smallbun.fast.manage.dict.service.SysDictTypeService;
 import org.smallbun.fast.manage.dict.vo.SysDictTypeVO;
+import org.smallbun.fast.manage.role.entity.SysRoleEntity;
 import org.smallbun.framework.annotation.DemoEnvironment;
 import org.smallbun.framework.annotation.LogAnnotation;
 import org.smallbun.framework.base.BaseController;
 import org.smallbun.framework.constant.OperateLogConstant;
 import org.smallbun.framework.result.AjaxResult;
 import org.smallbun.framework.result.PageableResult;
+import org.smallbun.framework.result.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
@@ -150,10 +153,10 @@ public class SysDictTypeController extends BaseController {
 	 */
 	@PostMapping(value = "/page")
 	@LogAnnotation(model = MODEL + SELECT_PAGE_MODEL, action = OperateLogConstant.SELECT_PAGE)
-	public PageableResult page(Page<SysDictTypeEntity> page, SysDictTypeVO vo) {
-		return PageableResult.builder().page(pageVOFilling(
-				sysDictTypeService.page(new PageFactory<SysDictTypeEntity>().defaultPage(page), new QueryWrapper<>(vo)),
-				SysDictTypeVO.class)).build();
+	public ResponseResult<SysDictTypeEntity> page(Page<SysDictTypeEntity> page, SysDictTypeVO vo) {
+		
+		IPage<SysDictTypeEntity> page1 = sysDictTypeService.page(new PageFactory<SysDictTypeEntity>().defaultPage(page), new QueryWrapper<>(vo));
+		return new ResponseResult<>(page1);
 	}
 
 	/**

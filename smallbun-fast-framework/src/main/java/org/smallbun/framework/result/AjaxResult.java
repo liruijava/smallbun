@@ -39,11 +39,14 @@ public class AjaxResult extends AbstractResult {
 	 * 返回结果内容 ,为方便返回不同类型，这个使用Object类型
 	 */
 	private Object result;
+	
+	private Long total;
 
-	private AjaxResult(String status, String msg, Object result) {
+	private AjaxResult(String status, String msg, Object result,Long total) {
 		this.status = status;
 		this.msg = msg;
 		this.result = result;
+		this.total = total;
 	}
 
 	public void setResult(Object result) {
@@ -55,9 +58,17 @@ public class AjaxResult extends AbstractResult {
 	}
 
 
+	public Long getTotal() {
+		return total;
+	}
+
+	public void setTotal(Long total) {
+		this.total = total;
+	}
+
 	@Override
 	public String toString() {
-		return "AjaxResult{" + "result=" + result + ", status='" + status + '\'' + ", msg='" + msg + '\'' + '}';
+		return "AjaxResult{" + "result=" + result + ", status='" + status + '\'' + ", msg='" + msg + '\'' + ", total='" + total +'\''+ '}';
 	}
 
 	public static AjaxResultBuilder builder() {
@@ -68,6 +79,7 @@ public class AjaxResult extends AbstractResult {
 		private String status;
 		private String msg;
 		private Object result;
+		private Long total;
 
 		AjaxResultBuilder() {
 		}
@@ -86,7 +98,11 @@ public class AjaxResult extends AbstractResult {
 			this.result = result;
 			return this;
 		}
-
+		
+		public AjaxResultBuilder total(Long total) {
+			this.total = total;
+			return this;
+		}
 
 		public AjaxResult build() {
 			if (StringUtils.isEmpty(status)) {
@@ -95,7 +111,7 @@ public class AjaxResult extends AbstractResult {
 			if (StringUtils.isEmpty(msg)) {
 				msg = HttpStatus.OK.getReasonPhrase();
 			}
-			return new AjaxResult(this.status, this.msg, this.result);
+			return new AjaxResult(this.status, this.msg, this.result,this.total);
 		}
 
 		/**
@@ -111,12 +127,12 @@ public class AjaxResult extends AbstractResult {
 			}
 			//进行加密操作
 
-			return new AjaxResult(this.status, this.msg, this.result);
+			return new AjaxResult(this.status, this.msg, this.result,this.total);
 		}
 
 		@Override
 		public String toString() {
-			return "AjaxResult.AjaxResultBuilder(status=" + this.status + ", msg=" + this.msg + ", data=" + this.result
+			return "AjaxResultBuilder (status=" + status + ", msg=" + msg + ", result=" + result + ", total=" + total
 					+ ")";
 		}
 	}

@@ -26,6 +26,7 @@
 <head>
     <div th:include="fragments/include  :: header('操作日志')"></div>
     <div th:include="fragments/include :: bootstrap-table-css"></div>
+<link rel="stylesheet" href="/static/common/plugins/layui/css/layui.css" media="all">
 </head>
 <body class="list-body">
 <section class="content">
@@ -44,7 +45,7 @@
                         <!--/*/</th:block>/*/-->
                         <!--/*/<th:block sec:authorize="hasAuthority('manage:log:operate:del')">/*/-->
                         <button class="btn btn-sm bg-maroon" data-toggle="tooltip" data-placement="left" title="删除"
-                                onclick="$.operate.batRemove()"><i
+                                onclick="batRemove()"><i
                                 class="fa fa-trash-o"></i> 删除
                         </button>
                         <!--/*/</th:block>/*/-->
@@ -63,19 +64,76 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <a class="btn ibtn-white btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn ibtn-white btn-sm" onclick="tables.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                             <a class="btn ibtn-white btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
                         </div>
                     </form>
-                    <table id="table" class="table table-bordered table-striped"
-                           data-mobile-responsive="true"></table>
+                     <table id="table" lay-filter="demo" class="table table-bordered table-striped"
+                           data-mobile-responsive="true"  ></table>
+                           
+                    <script id="barDemo" type="text/html">
+  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-primary" lay-event="detail">查看</a>
+  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-normal"  lay-event="edit">修改</a>
+  						<a class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger"  lay-event="del">删除</a>
+					</script> 
                 </div>
             </div>
         </div>
     </div>
 </section>
 </body>
+<script src="../static/common/plugins/jquery-3.1.1.min.js"></script>
 <div th:include="fragments/include :: include-js"></div>
 <div th:include="fragments/include :: bootstrap-table-js"></div>
-<script th:src="@{/static/modules/manage/js/log/operate_log_list.js}"></script>
+<script src="../static/common/plugins/layui/layui.js"></script>
+<script src="../static/common/plugins/layui/layui.all.js"></script>
+<script src="../static/common/js/common.js"></script>
+<script src="../static/common/js/table.js"></script>
+
+<script type="text/javascript" th:inline="none">
+var table;
+layui.use('table', function(){
+	table = layui.table;
+	  
+	  table.render(initOpt({
+	    url: contextPath + 'log/operate/page' ,
+	    cols: [[ 
+	    	{type:'checkbox', fixed: 'left'},
+	    	{field: 'id',hide:true},
+	    	  {field: 'title', title: '标题'},
+	            {field: 'operateIp', title: 'IP地址'},
+	            {field: 'operateLocation', title: '地点'},
+	            {field: 'operateUrl', title: '请求URL'},
+	            {field: 'method', title: '方法名称'},
+	            {field: 'operateStatus', title: '状态'},
+	            {field: 'operateTime', title: '操作时间'},
+	        ]]
+	  }
+	  ));
+
+	  
+	 
+});
+
+// 搜索
+	var tables = {
+			search : function(formId) {
+				var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
+				console.log($('#'+currentId).serializeObject());
+				table.reload('table', {
+				 	where:$('#'+currentId).serializeObject()
+				})
+			}
+	}
+	
+//行工具栏方法加载
+tableOn();
+</script>
+
+<script type="text/javascript">
+	var urlss = {
+		title:"操作日志",
+		removesUrl:contextPath + "log/operate/removeByIds",
+	};
+</script>
 </html>

@@ -24,11 +24,14 @@
 package org.smallbun.fast.manage.log.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.smallbun.fast.common.PageFactory;
 import org.smallbun.fast.manage.log.entity.SysOperateLogEntity;
 import org.smallbun.fast.manage.log.service.SysOperateLogService;
 import org.smallbun.fast.manage.log.vo.SysOperateLogVO;
+import org.smallbun.fast.manage.role.entity.SysRoleEntity;
 import org.smallbun.framework.annotation.AutoQueryDictValue;
 import org.smallbun.framework.annotation.DemoEnvironment;
 import org.smallbun.framework.annotation.LogAnnotation;
@@ -36,6 +39,7 @@ import org.smallbun.framework.base.BaseController;
 import org.smallbun.framework.constant.OperateLogConstant;
 import org.smallbun.framework.result.AjaxResult;
 import org.smallbun.framework.result.PageableResult;
+import org.smallbun.framework.result.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -97,10 +101,10 @@ public class SysOperateLogController extends BaseController {
 	@AutoQueryDictValue
 	@PostMapping(value = "/page")
 	@LogAnnotation(model = MODEL + SELECT_PAGE_MODEL, action = OperateLogConstant.SELECT_PAGE)
-	public PageableResult page(Page<SysOperateLogEntity> page, SysOperateLogVO vo) {
-		return PageableResult.builder().page(pageVOFilling(
-				sysOperateLogService.page(new PageFactory<SysOperateLogEntity>().defaultPage(page), vo),
-				SysOperateLogVO.class)).build();
+	public ResponseResult<SysOperateLogEntity> page(Page<SysOperateLogEntity> page, SysOperateLogVO vo) {
+		
+		IPage<SysOperateLogEntity> page1 = sysOperateLogService.page(new PageFactory<SysOperateLogEntity>().defaultPage(page), new QueryWrapper<>(vo));
+		return new ResponseResult<>(page1);
 	}
 
 
